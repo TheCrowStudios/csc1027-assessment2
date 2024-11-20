@@ -7,6 +7,7 @@ public class QUBMuseum {
 	static Scanner in = new Scanner(System.in);
 	static ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
 	static ArrayList<Artifact> artifacts = new ArrayList<Artifact>();
+	static ArrayList<AnnualPlan> annualPlans = new ArrayList<AnnualPlan>(); 
 
 	public static void main(String[] args) {
 		Menu menu = new Menu("QUB Museum", new String[] {"Manage Artifacts", "Manage Exhibits", "Manage Annual Plan", "Exit"});
@@ -88,13 +89,13 @@ public class QUBMuseum {
 					System.out.println("ID to look for: ");
 					int id = in.nextInt();
 					in.nextLine();
-					Artifact artifact = findArtifactById(id);
+					Artifact artifact = Helper.findArtifactById(artifacts, id);
 					if (artifact != null) searchResults.add(artifact);
 					break;
 				case 2: // search by name
 					System.out.println("Name to look for: ");
 					String name = in.nextLine();
-					searchResults = findArtifactsByName(name);
+					searchResults = Helper.findArtifactsByName(artifacts, name);
 					break;
 				case 3: // return
 					break;
@@ -115,28 +116,8 @@ public class QUBMuseum {
 		
 		while (input != "") {
 			System.out.println("Enter the exhibit ID or leave empty to go back");
+			input = in.nextLine();
 		}
-	}
-
-	public static Artifact findArtifactById(int id) {
-		for (int i = 0; i < artifacts.size(); i++) {
-			if (artifacts.get(i).getId() == id) {
-				return artifacts.get(i);
-			}
-		}
-		
-		return null;
-	}
-
-	public static ArrayList<Artifact> findArtifactsByName(String name) {
-		ArrayList<Artifact> searchResults = new ArrayList<Artifact>();
-		for (int i = 0; i < exhibits.size(); i++) {
-			if (artifacts.get(i).getName().contains(name)) {
-				searchResults.add(artifacts.get(i));
-			}
-		}
-		
-		return searchResults;
 	}
 
 	public static void ManageExhibits() {
@@ -192,13 +173,13 @@ public class QUBMuseum {
 					System.out.println("ID to look for: ");
 					int id = in.nextInt();
 					in.nextLine();
-					Exhibit exhibit = findExhibitById(id);
+					Exhibit exhibit = Helper.findExhibitById(exhibits, id);
 					if (exhibit != null) searchResults.add(exhibit);
 					break;
 				case 2: // search by name
 					System.out.println("Name to look for: ");
 					String name = in.nextLine();
-					searchResults = findExhibitsByName(name);
+					searchResults = Helper.findExhibitsByName(exhibits, name);
 					break;
 				case 3: // return
 					break;
@@ -224,27 +205,6 @@ public class QUBMuseum {
 		
 	}
 	
-	public static Exhibit findExhibitById(int id) {
-		for (int i = 0; i < exhibits.size(); i++) {
-			if (exhibits.get(i).getId() == id) {
-				return exhibits.get(i);
-			}
-		}
-		
-		return null;
-	}
-
-	public static ArrayList<Exhibit> findExhibitsByName(String name) {
-		ArrayList<Exhibit> searchResults = new ArrayList<Exhibit>();
-		for (int i = 0; i < exhibits.size(); i++) {
-			if (exhibits.get(i).getName().contains(name)) {
-				searchResults.add(exhibits.get(i));
-			}
-		}
-		
-		return searchResults;
-	}
-
 	public static void ManageAnnualPlan() {
 		Menu menu = new Menu("Manage Annual Plan", new String[] {"Create Annual Plan", "View Annual Plan", "Modify Annual Plan", "Go Back"});
 		
@@ -272,10 +232,53 @@ public class QUBMuseum {
 	}
 	
 	static void CreateAnnualPlan() {
-		
+		// Generate annual plan
+		System.out.print("Annual plan name: ");
+		String name = in.nextLine();
+		annualPlans.add(new AnnualPlan(name));
+		System.out.println("Added new annual plan with id: " + annualPlans.getLast().getId());
 	}
 
 	static void ViewAnnualPlan() {
+		for (int i = 0; i < annualPlans.size(); i++) {
+			System.out.println(annualPlans.get(i));
+			System.out.println();
+		}
+		
+		Menu menu = new Menu("Search options", new String[] {"ID", "Name", "Go back" });
+		int opt = -1;
+		
+		while (opt != 3) {
+			ArrayList<AnnualPlan> searchResults = new ArrayList<AnnualPlan>();
+			opt = menu.getUserChoice();
+			switch (opt) {
+				case 1: // search by id
+					System.out.println("ID to look for: ");
+					int id = in.nextInt();
+					in.nextLine();
+					Exhibit exhibit = Helper.findExhibitById(exhibits, id);
+					if (exhibit != null) searchResults.add(exhibit);
+					break;
+				case 2: // search by name
+					System.out.println("Name to look for: ");
+					String name = in.nextLine();
+					ArrayList<IdNameClass> paramList = (ArrayList<IdNameClass>)exhibits;
+					searchResults = Helper.findByName(, name);
+					break;
+				case 3: // return
+					break;
+			}
+			
+			// print search results
+			for (int i = 0; i < searchResults.size(); i++) {
+				System.out.println(searchResults.get(i));
+				System.out.println();
+			}
+			
+			if (searchResults.size() == 0) System.out.println("Could not find any exhibits with the specified search filters");
+		}
+
+		System.out.println();
 		
 	}
 

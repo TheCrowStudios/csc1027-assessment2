@@ -2,16 +2,14 @@ package part01;
 
 import java.util.ArrayList;
 
-public class Exhibit {
+public class Exhibit extends IdNameClass {
 	private int id;
 	private String name;
 	private ArrayList<Artifact> artifacts = new ArrayList<Artifact>();
 	static int currentId = 0;
 	
 	public Exhibit(String name) {
-		this.id = currentId;
-		this.name = name;
-		currentId += 1;
+		super(name);
 	}
 
 	public int getId() {
@@ -26,8 +24,24 @@ public class Exhibit {
 		return artifacts;
 	}
 	
-	public void addArtifact(Artifact artifact) {
-		artifacts.add(artifact);
+	public boolean addArtifact(Artifact artifact) {
+		if (Helper.findArtifactById(artifacts, artifact.getId()) == null) {
+			artifacts.add(artifact);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean removeArtifact(int id) {
+		for (int i = 0; i < artifacts.size(); i++) {
+			if (artifacts.get(i).getId() == id) {
+				artifacts.remove(i);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public int getEngagementTime() {

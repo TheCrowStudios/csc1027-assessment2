@@ -1,16 +1,13 @@
 package part01;
 
-public class Artifact {
+public class Artifact extends IdNameClass {
 	private int id;
 	private String name;
 	private int engagementTime;
-	static int currentId = 0;
 
 	public Artifact(String name, int engagementTime) {
-		this.id = currentId;
-		this.name = name;
+		super(name);
 		this.engagementTime = engagementTime;
-		currentId += 1;
 	}
 
 	public int getId() {

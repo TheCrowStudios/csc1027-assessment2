@@ -3,8 +3,6 @@ package part01;
 import java.util.ArrayList;
 
 public class Exhibit extends IdNameClass {
-	private int id;
-	private String name;
 	private ArrayList<Artifact> artifacts = new ArrayList<Artifact>();
 	static int currentId = 0;
 	
@@ -12,14 +10,6 @@ public class Exhibit extends IdNameClass {
 		super(name);
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-	
 	public ArrayList<Artifact> getArtifacts() {
 		return artifacts;
 	}
@@ -55,9 +45,7 @@ public class Exhibit extends IdNameClass {
 	}
 	
 	public String toString() {
-		return String.format("ID: %s\n"
-				+ "Name: %s\n"
-				+ "Number of artifacts: %d\n"
-				+ "Overall engagement time: %d", id, name, artifacts.size(), getEngagementTime());
+		return super.toString() + String.format("\nNumber of artifacts: %d\n"
+				+ "Overall engagement time: %d", artifacts.size(), getEngagementTime());
 	}
 }

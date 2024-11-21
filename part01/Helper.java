@@ -3,7 +3,7 @@ package part01;
 import java.util.ArrayList;
 
 public class Helper {
-	public static IdNameClass findById(ArrayList<IdNameClass> list, int id) {
+	public static <T extends IdNameClass> IdNameClass findById(ArrayList<? extends IdNameClass> list, int id) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getId() == id) {
 				return list.get(i);
@@ -13,15 +13,15 @@ public class Helper {
 		return null;
 	}
 
-	public static ArrayList<IdNameClass> findByName(ArrayList<IdNameClass> list, String name) {
-		ArrayList<IdNameClass> searchResults = new ArrayList<IdNameClass>();
+	public static <T extends IdNameClass> ArrayList<? extends IdNameClass> findByName(ArrayList<? extends IdNameClass> list, String name) {
+		ArrayList<T> searchResults = new ArrayList<T>();
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getName().contains(name)) {
-				searchResults.add(list.get(i));
+				searchResults.add((T) list.get(i));
 			}
 		}
 		
-		return searchResults;
+		return (ArrayList<? extends IdNameClass>) searchResults;
 	}
 
 	public static Exhibit findExhibitById(ArrayList<Exhibit> exhibits, int id) {

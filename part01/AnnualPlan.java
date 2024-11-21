@@ -43,8 +43,7 @@ public class AnnualPlan extends IdNameClass {
 		return false;
 	}
 	public String toString() {
-		return String.format("ID: %s\n"
-				+ "Name: %s", id, name);
+		return super.toString();
 	}
 
 	public String getName() {

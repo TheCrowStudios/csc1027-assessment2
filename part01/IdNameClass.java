@@ -19,4 +19,9 @@ public abstract class IdNameClass {
 	public String getName() {
 		return this.name;
 	}
+	
+	public String toString() {
+		return String.format("ID: %s\n"
+				+ "Name: %s", id, name);
+	}
 }

@@ -19,13 +19,13 @@ public class QUBMuseum {
 			
 			switch (opt) {
 				case 1:
-					ManageArtifacts();
+					manageArtifacts();
 					break;
 				case 2:
-					ManageExhibits();
+					manageExhibits();
 					break;
 				case 3:
-					ManageAnnualPlan();
+					manageAnnualPlans();
 					break;
 				case 4:
 					break;
@@ -45,7 +45,7 @@ public class QUBMuseum {
 		return (input == "y" ? true : false);
 	}
 	
-	public static void ManageArtifacts() {
+	public static void manageArtifacts() {
 		Menu menu = new Menu("Manage Artifacts", new String[] {"Add Artifact", "View Artifacts", "Delete Artifact", "Go Back"});
 		
 		int opt = -1;
@@ -57,17 +57,17 @@ public class QUBMuseum {
 			
 			switch (opt) {
 				case 1:
-					AddArtifact();
+					addArtifact();
 					break;
 				case 2:
-					ViewArtifacts();
+					viewArtifacts();
 					break;
 				case 3:
 					artifact = selectArtifact();
 					if (artifact != null) {
 						System.out.println("Are you sure you want to delete exhibit " + artifact.getName() + "y/n");
 						if (confirmAction()) {
-							if (DeleteArtifact(artifact)) System.out.println("Artifact deleted");
+							if (deleteArtifact(artifact)) System.out.println("Artifact deleted");
 							else System.out.println("Could not delete artifact");
 						} else {
 							System.out.println("Did not delete artifact");
@@ -129,7 +129,7 @@ public class QUBMuseum {
 		
 	}
 	
-	static void AddArtifact() {
+	static void addArtifact() {
 		// artifact name
 		System.out.print("artifact name  : ");
 		String artifactName = in.nextLine(); 
@@ -140,7 +140,7 @@ public class QUBMuseum {
 		System.out.println("Artifacn added with id: " + artifacts.getLast().getId());
 	}
 
-	static void ViewArtifacts() {
+	static void viewArtifacts() {
 		// artifact name
 		for (int i = 0; i < artifacts.size(); i++) {
 			System.out.println(artifacts.get(i));
@@ -195,7 +195,7 @@ public class QUBMuseum {
 		}
 	}
 
-	static boolean DeleteArtifact(Artifact artifact) {
+	static boolean deleteArtifact(Artifact artifact) {
 		for (int i = 0; i < artifacts.size(); i++) {
 			if (artifacts.get(i).getId() == artifact.getId()) {
 				artifacts.remove(i);
@@ -206,7 +206,7 @@ public class QUBMuseum {
 		return false;
 	}
 
-	public static void ManageExhibits() {
+	public static void manageExhibits() {
 		Menu menu = new Menu("Manage Exhibits", new String[] {"Add Exhibit", "View Exhibits", "Delete Exhibit", "Update Exhibits", "Go Back"});
 		
 		int opt = -1;
@@ -218,24 +218,24 @@ public class QUBMuseum {
 			
 			switch (opt) {
 				case 1:
-					AddExhibit();
+					addExhibit();
 					break;
 				case 2:
-					ViewExhibits();
+					viewExhibits();
 					break;
 				case 3:
-					exhibit = SelectExhibit();
+					exhibit = selectExhibit();
 					if (exhibit != null) {
 						System.out.println("Are you sure you want to delete exhibit " + exhibit.getName() + "y/n");
 						do {
 							input = in.nextLine();
 						} while (input != "y" && input != "n");
 					}
-					if (input == "y") DeleteExhibit(exhibit);
+					if (input == "y") deleteExhibit(exhibit);
 					break;
 				case 4:
-					exhibit = SelectExhibit();
-					if (exhibit != null) UpdateExhibit(SelectExhibit());
+					exhibit = selectExhibit();
+					if (exhibit != null) updateExhibit(selectExhibit());
 					break;
 				case 5:
 					break;
@@ -245,14 +245,14 @@ public class QUBMuseum {
 		}
 	}
 	
-	public static void AddExhibit() {
+	public static void addExhibit() {
 		System.out.print("exhibit name  : ");
 		String name = in.nextLine();
 		exhibits.add(new Exhibit(name));
 		System.out.println("Exhibit added with id: " + exhibits.getLast().getId());
 	}
 	
-	public static void ViewExhibits() {
+	public static void viewExhibits() {
 		if (exhibits.size() == 0) {
 			System.out.println("There are no exhibits, add some and try again");
 			return;
@@ -299,7 +299,7 @@ public class QUBMuseum {
 		System.out.println();
 	}
 	
-	public static boolean DeleteExhibit(Exhibit exhibit) {
+	public static boolean deleteExhibit(Exhibit exhibit) {
 		for (int i = 0; i < exhibits.size(); i++) {
 			if (exhibits.get(i).getId() == exhibit.getId()) {
 				exhibits.remove(i);
@@ -310,7 +310,7 @@ public class QUBMuseum {
 		return false;
 	}
 	
-	public static Exhibit SelectExhibit() {
+	public static Exhibit selectExhibit() {
 		if (exhibits.size() == 0) {
 			System.out.println("There are no exhibits, add some and try again");
 			return null;
@@ -356,7 +356,7 @@ public class QUBMuseum {
 		return exhibit;
 	}
 	
-	public static void UpdateExhibit(Exhibit exhibit) {
+	public static void updateExhibit(Exhibit exhibit) {
 		if (exhibit == null) return;
 		
 		Menu menu = new Menu("Update exhibit " + exhibit.getName(), new String[] {"Add artifact to exhibit", "Remove artifact from exhibit", "Modify Annual Plan", "Go Back"});
@@ -384,7 +384,7 @@ public class QUBMuseum {
 		}
 	}
 	
-	public static void ManageAnnualPlan() {
+	public static void manageAnnualPlans() {
 		Menu menu = new Menu("Manage Annual Plan", new String[] {"Create Annual Plan", "View Annual Plan", "Modify Annual Plan", "Go Back"});
 		
 		int opt = -1;
@@ -394,13 +394,13 @@ public class QUBMuseum {
 			
 			switch (opt) {
 				case 1:
-					CreateAnnualPlan();
+					createAnnualPlan();
 					break;
 				case 2:
-					ViewAnnualPlan();
+					viewAnnualPlan();
 					break;
 				case 3:
-					ModifyAnnualPlan();
+					modifyAnnualPlan();
 					break;
 				case 4:
 					break;
@@ -410,7 +410,7 @@ public class QUBMuseum {
 		}
 	}
 	
-	static void CreateAnnualPlan() {
+	static void createAnnualPlan() {
 		// Generate annual plan
 		System.out.print("Annual plan name (e.g. name of the exhibit hall): ");
 		String name = in.nextLine();
@@ -418,7 +418,7 @@ public class QUBMuseum {
 		System.out.println("Added new annual plan with id: " + annualPlans.getLast().getId());
 	}
 
-	static void ViewAnnualPlan() {
+	static void viewAnnualPlan() {
 		for (int i = 0; i < annualPlans.size(); i++) {
 			System.out.println(annualPlans.get(i));
 			System.out.println();
@@ -460,7 +460,7 @@ public class QUBMuseum {
 		
 	}
 
-	static void ModifyAnnualPlan() {
+	static void modifyAnnualPlan() {
 		
 	}
 

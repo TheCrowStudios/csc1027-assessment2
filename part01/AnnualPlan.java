@@ -3,26 +3,19 @@ package part01;
 import java.util.ArrayList;
 
 public class AnnualPlan extends IdNameClass {
-	private int id;
-	private String name;
 	private ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
 	private ArrayList<String> exhibitDates = new ArrayList<String>();
-	static int currentId = 0;
 
 	public AnnualPlan(String name) {
 		super(name);
 	}
 	
-	public int getId() {
-		return id;
-	}
-
 	public ArrayList<Exhibit> getExhibits() {
 		return exhibits;
 	}
 	
 	public boolean addExhibit(Exhibit exhibit, String date) {
-		if (Helper.findExhibitById(exhibits, id) == null) {
+		if (Helper.findExhibitById(exhibits, exhibit.getId()) == null) {
 			exhibits.add(exhibit);
 			exhibitDates.add(date);
 			return true;
@@ -53,13 +46,10 @@ public class AnnualPlan extends IdNameClass {
 		if (exhibits.size() == 0) detailed += "Exhibits in annual plan:\n";
 		
 		for (int i = 0; i < exhibits.size(); i++) {
-			detailed += exhibits.get(i);
+			detailed += exhibits.get(i) + "\n";
+			detailed += exhibitDates.get(i) + "\n";
 		}
 		
 		return detailed;
-	}
-
-	public String getName() {
-		return name;
 	}
 }

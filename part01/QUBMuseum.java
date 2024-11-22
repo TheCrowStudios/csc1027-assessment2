@@ -40,6 +40,7 @@ public class QUBMuseum {
 
 		do {
 			input = in.nextLine();
+			System.out.println("input: " + input);
 		} while (input != "y" && input != "n");
 		
 		return (input == "y" ? true : false);
@@ -455,7 +456,7 @@ public class QUBMuseum {
 				System.out.println();
 			}
 			
-			if (searchResults.size() == 0) System.out.println("Could not find any exhibits with the specified search filters");
+			if (searchResults.size() == 0) System.out.println("Could not find any annual plans with the specified search filters");
 		}
 
 		System.out.println();
@@ -483,15 +484,22 @@ public class QUBMuseum {
 					exhibit = selectExhibit();
 					if (exhibit != null) {
 						System.out.println("Add exhibit " + exhibit.getName() + " to annual plan " + annualPlan.getName() + "? y/n");
+						// TODO - get date
 						if (confirmAction()) {
-							annualPlan.addExhibit(exhibit, null);
+							if (annualPlan.addExhibit(exhibit, null)) System.out.println("Exhibit added");
+							else System.out.println("Could not add exhibit, conflicting dates");
 						} else System.out.println("Did not add exhibit");
 					}
 					break;
 				case 2:
 					exhibit = selectExhibit();
 					if (exhibit != null) {
-						
+						System.out.println("Add exhibit " + exhibit.getName() + " to annual plan " + annualPlan.getName() + "? y/n");
+						// TODO - get date
+						if (confirmAction()) {
+							if (annualPlan.removeExhibit(exhibit.getId())) System.out.println("Exhibit removed from annual plan");
+							else System.out.println("Could not remove exhibit");
+						} else System.out.println("Did not remove exhibit");
 					}
 					break;
 				case 3:

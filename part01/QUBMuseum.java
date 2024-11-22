@@ -359,7 +359,7 @@ public class QUBMuseum {
 	public static void updateExhibit(Exhibit exhibit) {
 		if (exhibit == null) return;
 		
-		Menu menu = new Menu("Update exhibit " + exhibit.getName(), new String[] {"Add artifact to exhibit", "Remove artifact from exhibit", "Modify Annual Plan", "Go Back"});
+		Menu menu = new Menu("Update exhibit " + exhibit.getName(), new String[] {"Add artifact to exhibit", "Remove artifact from exhibit", "Go Back"});
 		
 		int opt = -1;
 		Artifact artifact;
@@ -385,11 +385,11 @@ public class QUBMuseum {
 	}
 	
 	public static void manageAnnualPlans() {
-		Menu menu = new Menu("Manage Annual Plan", new String[] {"Create Annual Plan", "View Annual Plan", "Modify Annual Plan", "Go Back"});
+		Menu menu = new Menu("Manage Annual Plan", new String[] {"Create Annual Plan", "View All Annual Plans", "View exhibits in an annual plan", "Modify Annual Plan", "Go Back"});
 		
 		int opt = -1;
 		
-		while (opt != 4) {
+		while (opt != 5) {
 			opt = menu.getUserChoice();
 			
 			switch (opt) {
@@ -397,12 +397,14 @@ public class QUBMuseum {
 					createAnnualPlan();
 					break;
 				case 2:
-					viewAnnualPlan();
+					viewAnnualPlans();
 					break;
 				case 3:
-					modifyAnnualPlan();
-					break;
+					viewAnnualPlan(selectAnnualPlan());
 				case 4:
+					modifyAnnualPlan(selectAnnualPlan());
+					break;
+				case 5:
 					break;
 				default:
 					break;
@@ -418,7 +420,7 @@ public class QUBMuseum {
 		System.out.println("Added new annual plan with id: " + annualPlans.getLast().getId());
 	}
 
-	static void viewAnnualPlan() {
+	static void viewAnnualPlans() {
 		for (int i = 0; i < annualPlans.size(); i++) {
 			System.out.println(annualPlans.get(i));
 			System.out.println();
@@ -460,8 +462,53 @@ public class QUBMuseum {
 		
 	}
 
-	static void modifyAnnualPlan() {
+	static void viewAnnualPlan(AnnualPlan annualPlan) {
+		if (annualPlan == null) return;
+
+	}
+
+	static void modifyAnnualPlan(AnnualPlan annualPlan) {
+		if (annualPlan == null) return;
 		
+		Menu menu = new Menu("Update annual plan " + annualPlan.getName(), new String[] {"Add exhibit to annual plan", "Remove exhibit from annual plan", "Change the date of an exhibit", "View annual plan details", "Go Back"});
+		
+		int opt = -1;
+		Exhibit exhibit;
+		
+		while (opt != 5) {
+			opt = menu.getUserChoice();
+			
+			switch (opt) {
+				case 1:
+					exhibit = selectExhibit();
+					if (exhibit != null) {
+						System.out.println("Add exhibit " + exhibit.getName() + " to annual plan " + annualPlan.getName() + "? y/n");
+						if (confirmAction()) {
+							annualPlan.addExhibit(exhibit, null);
+						} else System.out.println("Did not add exhibit");
+					}
+					break;
+				case 2:
+					exhibit = selectExhibit();
+					if (exhibit != null) {
+						
+					}
+					break;
+				case 3:
+					exhibit = selectExhibit();
+					if (exhibit != null) {
+						
+					}
+					break;
+				case 4:
+					System.out.println(annualPlan);
+					break;
+				case 5:
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	public static AnnualPlan selectAnnualPlan() {

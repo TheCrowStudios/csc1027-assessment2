@@ -42,8 +42,21 @@ public class AnnualPlan extends IdNameClass {
 		
 		return false;
 	}
+
 	public String toString() {
 		return super.toString();
+	}
+	
+	public String toStringDetailed() {
+		String detailed = toString() + "\n";
+		
+		if (exhibits.size() == 0) detailed += "Exhibits in annual plan:\n";
+		
+		for (int i = 0; i < exhibits.size(); i++) {
+			detailed += exhibits.get(i);
+		}
+		
+		return detailed;
 	}
 
 	public String getName() {

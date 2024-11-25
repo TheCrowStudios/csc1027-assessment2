@@ -24,46 +24,69 @@ public class Helper {
 		return (ArrayList<? extends IdNameClass>) searchResults;
 	}
 
-	public static Exhibit findExhibitById(ArrayList<Exhibit> exhibits, int id) {
-		for (int i = 0; i < exhibits.size(); i++) {
-			if (exhibits.get(i).getId() == id) {
-				return exhibits.get(i);
+	public static <T extends IdNameClass> ArrayList<? extends IdNameClass> sortByName(ArrayList<? extends IdNameClass> list) {
+		ArrayList<T> sorted = new ArrayList<T>();
+
+		for (int i = 0; i < list.size(); i++) {
+			sorted.add((T) list.get(i)); // fill new list
+		}
+
+		Boolean swapped = true;
+
+		while (swapped) {
+			swapped = false;
+
+			for (int i = 0; i < sorted.size() - 1; i++) {
+				if (sorted.get(i).getName().compareTo(sorted.get(i + 1).getName()) > 0) {
+					T object = sorted.get(i);
+					sorted.set(i, sorted.get(i + 1));
+					sorted.set(i + 1, object);
+					swapped = true;
+				}
 			}
 		}
-		
-		return null;
+
+		return sorted;
 	}
 
-	public static ArrayList<Exhibit> findExhibitsByName(ArrayList<Exhibit> exhibits, String name) {
-		ArrayList<Exhibit> searchResults = new ArrayList<Exhibit>();
-		for (int i = 0; i < exhibits.size(); i++) {
-			if (exhibits.get(i).getName().contains(name)) {
-				searchResults.add(exhibits.get(i));
-			}
+	public static void generateArtifacts(Museum museum) {
+		museum.artifacts.add(new Artifact("Delaware Landscape", 1));
+		museum.artifacts.add(new Artifact("Acropolis Statues", 5));
+		museum.artifacts.add(new Artifact("Incas Interactive", 10));
+		museum.artifacts.add(new Artifact("TouchIt", 8));
+		museum.artifacts.add(new Artifact("1KG Carbon Statue", 8));
+		museum.artifacts.add(new Artifact("Dinosaur Statue", 8));
+		museum.artifacts.add(new Artifact("Tar Pit Miniature", 8));
+		museum.artifacts.add(new Artifact("Coal Miner Portrait", 8));
+		museum.artifacts.add(new Artifact("Home Carbon Footprint Miniature", 8));
+	}
+
+	public static void generateExhibits(Museum museum) {
+		museum.exhibits.add(new Exhibit("Global Warming"));
+		museum.exhibits.add(new Exhibit("Egypt"));
+		museum.exhibits.add(new Exhibit("Architecture"));
+		museum.exhibits.add(new Exhibit("Vikings"));
+		museum.exhibits.add(new Exhibit("History of AI"));
+		museum.exhibits.add(new Exhibit("Ship Building"));
+		museum.exhibits.add(new Exhibit("Henry VIII"));
+		museum.exhibits.add(new Exhibit("Geology"));
+		museum.exhibits.add(new Exhibit("Beasts of the Sea"));
+	}
+
+	public static void generateAnnualPlan(Museum museum) {
+		museum.annualPlans.add(new AnnualPlan("Exhibit Hall 1"));
+	}
+
+	public static Museum generateMuseum() {
+		Museum museum = new Museum();
+		generateArtifacts(museum);
+		generateExhibits(museum);
+		generateAnnualPlan(museum);
+
+		for (int i = 0; i < museum.exhibits.size(); i++) {
+			
 		}
-		
-		return searchResults;
-	}
 
-	public static Artifact findArtifactById(ArrayList<Artifact> artifacts, int id) {
-		for (int i = 0; i < artifacts.size(); i++) {
-			if (artifacts.get(i).getId() == id) {
-				return artifacts.get(i);
-			}
-		}
-		
-		return null;
+		return museum;
 	}
-
-	public static ArrayList<Artifact> findArtifactsByName(ArrayList<Artifact> artifacts, String name) {
-		ArrayList<Artifact> searchResults = new ArrayList<Artifact>();
-		for (int i = 0; i < artifacts.size(); i++) {
-			if (artifacts.get(i).getName().contains(name)) {
-				searchResults.add(artifacts.get(i));
-			}
-		}
-		
-		return searchResults;
-	}
-
 }

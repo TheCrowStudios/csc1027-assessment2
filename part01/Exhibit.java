@@ -15,7 +15,7 @@ public class Exhibit extends IdNameClass {
 	}
 	
 	public boolean addArtifact(Artifact artifact) {
-		if (Helper.findArtifactById(artifacts, artifact.getId()) == null) {
+		if (Helper.findById(artifacts, artifact.getId()) == null) {
 			artifacts.add(artifact);
 			return true;
 		}

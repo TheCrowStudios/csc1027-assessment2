@@ -22,76 +22,80 @@ public class QUBWebMuseum {
                 System.out.println("Web request to: " + wr.path);
 
                 String filePath = ROOT + "public/" + wr.path;
-                System.out.println("Attempting to get file: " + filePath);
-                File file = new File(filePath);
-                if (file.exists()) {
-                    try {
-                        long maxlen = file.length();
-                        FileInputStream fis = new FileInputStream(file);
-
-                        // This range and offset code enables a webserver to request part of a file,
-                        // this supports applications like streaming video
-                        long startFrom = 0;
-                        long endat = -1;
-                        long rangebytes = -1;
-                        String resulttype = WebRequest.HTTP_OK;
-                        String range = wr.parms.get("Range");
-                        String rangeend = null;
-                        if (range != null) {
-                            System.out.println(range);
-                            if (range.startsWith("bytes=")) {
-                                resulttype = WebRequest.HTTP_PARTIAL;
-                                range = range.substring("bytes=".length());
-                                int minus = range.indexOf('-');
-                                if (minus > 0) {
-                                    rangeend = range.substring(minus + 1);
-                                    range = range.substring(0, minus);
-                                }
-                                try {
-                                    startFrom = Long.parseLong(range);
-                                    endat = Long.parseLong(rangeend);
-                                } catch (NumberFormatException nfe) {
-                                    rangebytes = 512 * 1024;
-                                    if (rangebytes > (maxlen - startFrom)) {
-                                        resulttype = WebRequest.HTTP_OK;
-                                        rangebytes = (maxlen - startFrom);
-                                    } else {
-                                        resulttype = WebRequest.HTTP_PARTIAL;
-                                    }
-                                }
-
-                            }
-                            if (endat != -1) {
-                                rangebytes = endat - startFrom;
-                            } else {
-                                rangebytes = (maxlen - startFrom);
-                            }
-                        } else {
-                            long chunk = 100 * 1024 * 1024;
-                            rangebytes = maxlen - startFrom;
-                            if (rangebytes > chunk) {
-                                rangebytes = chunk;
-                                resulttype = WebRequest.HTTP_PARTIAL;
-                            }
-                        }
-
-                        try {
-                            fis.skip(startFrom);
-                        } catch (Exception e) {
-                            System.out.println(e.toString());
-                        }
-
-                        String mime = WebRequest.getMimeType(wr.path);
-
-                        wr.r = new Response(resulttype, mime, rangebytes, fis);
-                        wr.r.addHeader("Content-length", "" + (rangebytes));
-                        wr.r.addHeader("Content-range", "bytes " + startFrom + "-" +
-                                (startFrom + rangebytes - 1) + "/" + maxlen);
-                    } catch (Exception e) {
-                        wr.r = new Response(WebRequest.HTTP_NOTFOUND, WebRequest.MIME_HTML, e.getMessage());
-                    }
+                if (wr.path.equals("artifacts.json")) {
+                    wr.r = new Response();
                 } else {
-                    wr.r = new Response(WebRequest.HTTP_NOTFOUND, WebRequest.MIME_HTML, "File not found");
+                    System.out.println("Attempting to get file: " + filePath);
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        try {
+                            long maxlen = file.length();
+                            FileInputStream fis = new FileInputStream(file);
+
+                            // This range and offset code enables a webserver to request part of a file,
+                            // this supports applications like streaming video
+                            long startFrom = 0;
+                            long endat = -1;
+                            long rangebytes = -1;
+                            String resulttype = WebRequest.HTTP_OK;
+                            String range = wr.parms.get("Range");
+                            String rangeend = null;
+                            if (range != null) {
+                                System.out.println(range);
+                                if (range.startsWith("bytes=")) {
+                                    resulttype = WebRequest.HTTP_PARTIAL;
+                                    range = range.substring("bytes=".length());
+                                    int minus = range.indexOf('-');
+                                    if (minus > 0) {
+                                        rangeend = range.substring(minus + 1);
+                                        range = range.substring(0, minus);
+                                    }
+                                    try {
+                                        startFrom = Long.parseLong(range);
+                                        endat = Long.parseLong(rangeend);
+                                    } catch (NumberFormatException nfe) {
+                                        rangebytes = 512 * 1024;
+                                        if (rangebytes > (maxlen - startFrom)) {
+                                            resulttype = WebRequest.HTTP_OK;
+                                            rangebytes = (maxlen - startFrom);
+                                        } else {
+                                            resulttype = WebRequest.HTTP_PARTIAL;
+                                        }
+                                    }
+
+                                }
+                                if (endat != -1) {
+                                    rangebytes = endat - startFrom;
+                                } else {
+                                    rangebytes = (maxlen - startFrom);
+                                }
+                            } else {
+                                long chunk = 100 * 1024 * 1024;
+                                rangebytes = maxlen - startFrom;
+                                if (rangebytes > chunk) {
+                                    rangebytes = chunk;
+                                    resulttype = WebRequest.HTTP_PARTIAL;
+                                }
+                            }
+
+                            try {
+                                fis.skip(startFrom);
+                            } catch (Exception e) {
+                                System.out.println(e.toString());
+                            }
+
+                            String mime = WebRequest.getMimeType(wr.path);
+
+                            wr.r = new Response(resulttype, mime, rangebytes, fis);
+                            wr.r.addHeader("Content-length", "" + (rangebytes));
+                            wr.r.addHeader("Content-range", "bytes " + startFrom + "-" +
+                                    (startFrom + rangebytes - 1) + "/" + maxlen);
+                        } catch (Exception e) {
+                            wr.r = new Response(WebRequest.HTTP_NOTFOUND, WebRequest.MIME_HTML, e.getMessage());
+                        }
+                    } else {
+                        wr.r = new Response(WebRequest.HTTP_NOTFOUND, WebRequest.MIME_HTML, "File not found");
+                    }
                 }
             
                 Thread thread = new Thread(wr);

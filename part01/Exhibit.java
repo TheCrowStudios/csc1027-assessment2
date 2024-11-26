@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public class Exhibit extends IdNameClass {
 	private ArrayList<Artifact> artifacts = new ArrayList<Artifact>();
-	static int currentId = 0;
+	private static int currentId;
 	
 	public Exhibit(String name) {
-		super(name);
+		super(currentId, name);
+		currentId += 1;
 	}
 
 	public ArrayList<Artifact> getArtifacts() {

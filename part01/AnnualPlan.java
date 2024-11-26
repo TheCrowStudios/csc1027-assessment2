@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class AnnualPlan extends IdNameClass {
 	private final ArrayList<AnnualPlanExhibit> exhibits = new ArrayList<>(12);
+	private static int currentId;
 
 	public AnnualPlan(String name) {
-		super(name);
-		for (int i = 0; i < 12; i++) {
+		super(currentId, name);
+		currentId += 1;
+		for (int i = 0; i < 12; i++) { // fill exhibits arraylist with null values as they are inserted into the arraylist at the position of the month
 			exhibits.add(null);
 		}
 	}

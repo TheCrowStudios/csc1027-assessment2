@@ -8,4 +8,25 @@ public class ExhibitArtifact {
 		this.artifact = artifact;
 		this.signText = signText;
 	}
+
+    public Artifact getArtifact() {
+        return artifact;
+    }
+
+    public void setArtifact(Artifact artifact) {
+        this.artifact = artifact;
+    }
+
+    public String getSignText() {
+        return signText;
+    }
+
+    public void setSignText(String signText) {
+        this.signText = signText;
+    }
+
+    @Override
+    public String toString() {
+        return artifact.toString() + "\nSign text: " + signText;
+    }
 }

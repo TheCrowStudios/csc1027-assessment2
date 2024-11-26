@@ -40,3 +40,22 @@ body {
     text-decoration: none;
     color: #222222;
 }
+
+.table-editable {
+    color: #ececec;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: #080808;
+    width: 100%;
+}
+
+th {
+    color: #aaaaaa;
+}
+
+th, td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ececec;
+    padding: 8px;
+}

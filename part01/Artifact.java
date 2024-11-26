@@ -2,10 +2,14 @@ package part01;
 
 public class Artifact extends IdNameClass {
 	private int engagementTime;
+	private ArtifactType type;
+	private static int currentId;
 
-	public Artifact(String name, int engagementTime) {
-		super(name);
+	public Artifact(String name, ArtifactType type, int engagementTime) {
+		super(currentId, name);
+		this.type = type;
 		this.engagementTime = engagementTime;
+		currentId += 1;
 	}
 
 	public int getEngagementTime() {
@@ -13,7 +17,10 @@ public class Artifact extends IdNameClass {
 	}
 	
 	public String toString() {
-		return String.format("ID: %s\n"
-				+ "Name: %s", super.getId(), super.getName());
+		return super.toString() + String.format("\nType: %s\nEngagement time: %d", type.name(), engagementTime);
 	}
+
+    public ArtifactType getType() {
+        return type;
+    }
 }

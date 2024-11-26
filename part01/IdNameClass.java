@@ -3,13 +3,10 @@ package part01;
 public abstract class IdNameClass {
 	private int id;
 	private String name;
-	private static int currentId;
 
-	public IdNameClass(String name) {
-		this.id = currentId;
+	public IdNameClass(int id, String name) {
+		this.id = id;
 		this.name = name;
-		currentId += 1;
-		
 	}
 
 	public int getId() {

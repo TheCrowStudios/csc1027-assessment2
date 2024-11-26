@@ -7,7 +7,7 @@
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <table>
+    <table id="table-editable" class="table-editable">
         <thead>
             <tr>
                 <th>ID</th>
@@ -19,10 +19,22 @@
         </thead>
         <tbody>
             <tr>
-                <th></th>
+                <td>meow</td>
+                <td>
+                    <select name="artifactType" id="artifactType-0">
+                        <option value="1">Artifact</option>
+                        <option value="2">Painting</option>
+                        <option value="3">Sculpture</option>
+                        <option value="4">Digital</option>
+                        <option value="5">Tactile</option>
+                        <option value="6">Other</option>
+                    </select>
+                </td>
             </tr>
         </tbody>
     </table>
     
+    <button id="btn-add-row">Add artifact</button>
+    <script src="edit_artifacts.js"></script>
 </body>
 </html>

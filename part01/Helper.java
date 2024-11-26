@@ -50,15 +50,15 @@ public class Helper {
 	}
 
 	public static void generateArtifacts(Museum museum) {
-		museum.artifacts.add(new Artifact("Delaware Landscape", 1));
-		museum.artifacts.add(new Artifact("Acropolis Statues", 5));
-		museum.artifacts.add(new Artifact("Incas Interactive", 10));
-		museum.artifacts.add(new Artifact("TouchIt", 8));
-		museum.artifacts.add(new Artifact("1KG Carbon Statue", 8));
-		museum.artifacts.add(new Artifact("Dinosaur Statue", 8));
-		museum.artifacts.add(new Artifact("Tar Pit Miniature", 8));
-		museum.artifacts.add(new Artifact("Coal Miner Portrait", 8));
-		museum.artifacts.add(new Artifact("Home Carbon Footprint Miniature", 8));
+		museum.artifacts.add(new Artifact("Delaware Landscape", ArtifactType.PAINTING, 1));
+		museum.artifacts.add(new Artifact("Acropolis Statues", ArtifactType.SCULPTURE, 5));
+		museum.artifacts.add(new Artifact("Incas Interactive", ArtifactType.DIGITAL, 10));
+		museum.artifacts.add(new Artifact("TouchIt", ArtifactType.TACTILE, 8));
+		museum.artifacts.add(new Artifact("1KG Carbon Statue", ArtifactType.SCULPTURE, 8));
+		museum.artifacts.add(new Artifact("Dinosaur Statue", ArtifactType.ARTIFACT, 8));
+		museum.artifacts.add(new Artifact("Tar Pit Miniature", ArtifactType.SCULPTURE, 8));
+		museum.artifacts.add(new Artifact("Coal Miner Portrait", ArtifactType.PAINTING, 8));
+		museum.artifacts.add(new Artifact("Home Carbon Footprint Miniature", ArtifactType.SCULPTURE, 8));
 	}
 
 	public static void generateExhibits(Museum museum) {

@@ -2,6 +2,7 @@ package part01;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.WeakHashMap;
 
 public class QUBMuseum {
 	static Scanner in = new Scanner(System.in);
@@ -42,18 +43,19 @@ public class QUBMuseum {
 
 	public static void manageArtifacts() {
 		Menu menu = new Menu("Manage Artifacts",
-				new String[] { "Add Artifact", "View Artifacts", "Delete Artifact", "Go Back" });
+				new String[] { "Add Artifact", "View Artifacts", "View artifacts sorted alphabetically", "Delete Artifact", "Go Back" });
 
 		int opt = -1;
 		Artifact artifact;
 
-		while (opt != 4) {
+		while (opt != 5) {
 			opt = menu.getUserChoice();
 
 			switch (opt) {
-				case 1 -> addArtifact();
-				case 2 -> viewArtifacts();
-				case 3 -> {
+				case 1 -> addArtifact(); // add artifact
+				case 2 -> viewArtifacts(false); // view artifacts
+				case 3 -> viewArtifacts(true);
+				case 4 -> { // delete artifact
 					artifact = selectArtifact();
 					if (artifact != null) {
 						System.out.println("Are you sure you want to delete artifact " + artifact.getName() + "y/n");
@@ -67,7 +69,7 @@ public class QUBMuseum {
 						}
 					}
 				}
-				case 4 -> {
+				case 5 -> { // go back
 				}
 				default -> {
 				}
@@ -129,16 +131,20 @@ public class QUBMuseum {
 		// artifact name
 		System.out.print("artifact name  : ");
 		String artifactName = in.nextLine();
+		Menu artifactTypeMenu = new Menu("Select artifact type", new String[] {"Artifact", "Painting", "Sculpture", "Digital", "Tactile", "Other"});
+		ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
 		System.out.print("engagement time: ");
 		int engagementTime = in.nextInt();
 		in.nextLine();
-		museum.artifacts.add(new Artifact(artifactName, engagementTime));
+		museum.artifacts.add(new Artifact(artifactName, type, engagementTime));
 		System.out.println("Artifacn added with id: " + museum.artifacts.getLast().getId());
 	}
 
-	static void viewArtifacts() {
+	static void viewArtifacts(Boolean sorted) {
 		// artifact name
-		ArrayList<Artifact> sortedArtifacts = (ArrayList<Artifact>) Helper.sortByName(museum.artifacts);
+		ArrayList<Artifact> sortedArtifacts = null;
+		if (sorted) sortedArtifacts = (ArrayList<Artifact>) Helper.sortByName(museum.artifacts);
+		else sortedArtifacts = museum.artifacts;
 
 		for (int i = 0; i < sortedArtifacts.size(); i++) {
 			System.out.println(sortedArtifacts.get(i));
@@ -257,13 +263,15 @@ public class QUBMuseum {
 	}
 
 	public static void viewExhibits() {
-		if (museum.exhibits.size() == 0) {
+		ArrayList<Exhibit> sortedExhibits = (ArrayList<Exhibit>) Helper.sortByName(museum.exhibits);
+
+		if (sortedExhibits.size() == 0) {
 			System.out.println("There are no exhibits, add some and try again");
 			return;
 		}
 
-		for (int i = 0; i < museum.exhibits.size(); i++) {
-			System.out.println(museum.exhibits.get(i));
+		for (int i = 0; i < sortedExhibits.size(); i++) {
+			System.out.println(sortedExhibits.get(i));
 			System.out.println();
 		}
 

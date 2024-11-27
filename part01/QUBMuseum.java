@@ -129,15 +129,15 @@ public class QUBMuseum {
 
 	static void addArtifact() {
 		// artifact name
-		System.out.print("artifact name  : ");
+		System.out.print("Artifact name  : ");
 		String artifactName = in.nextLine();
 		Menu artifactTypeMenu = new Menu("Select artifact type", new String[] {"Artifact", "Painting", "Sculpture", "Digital", "Tactile", "Other"});
 		ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
-		System.out.print("engagement time: ");
+		System.out.print("Engagement time: ");
 		int engagementTime = in.nextInt();
 		in.nextLine();
 		museum.artifacts.add(new Artifact(artifactName, type, engagementTime));
-		System.out.println("Artifacn added with id: " + museum.artifacts.getLast().getId());
+		System.out.println("Artifact added with id: " + museum.artifacts.getLast().getId());
 	}
 
 	static void viewArtifacts(Boolean sorted) {
@@ -217,19 +217,20 @@ public class QUBMuseum {
 
 	public static void manageExhibits() {
 		Menu menu = new Menu("Manage Exhibits",
-				new String[] { "Add Exhibit", "View Exhibits", "Delete Exhibit", "Update Exhibits", "Go Back" });
+				new String[] { "Add exhibit", "View exhibits", "View exhibits sorted alphabetically", "Delete exhibit", "Update exhibits", "Go back" });
 
 		int opt = -1;
 
-		while (opt != 5) {
+		while (opt != 6) {
 			opt = menu.getUserChoice();
 			Exhibit exhibit;
 			String input = "";
 
 			switch (opt) {
 				case 1 -> addExhibit();
-				case 2 -> viewExhibits();
-				case 3 -> {
+				case 2 -> viewExhibits(false);
+				case 3 -> viewExhibits(true);
+				case 4 -> {
 					exhibit = selectExhibit();
 					if (exhibit != null) {
 						System.out.println("Are you sure you want to delete exhibit " + exhibit.getName() + " y/n");
@@ -242,12 +243,12 @@ public class QUBMuseum {
 							System.out.println("Did not delete exhibit");
 					}
 				}
-				case 4 -> {
+				case 5 -> {
 					exhibit = selectExhibit();
 					if (exhibit != null)
 						updateExhibit(selectExhibit());
 				}
-				case 5 -> {
+				case 6 -> {
 				}
 				default -> {
 				}
@@ -262,8 +263,10 @@ public class QUBMuseum {
 		System.out.println("Exhibit added with id: " + museum.exhibits.getLast().getId());
 	}
 
-	public static void viewExhibits() {
-		ArrayList<Exhibit> sortedExhibits = (ArrayList<Exhibit>) Helper.sortByName(museum.exhibits);
+	public static void viewExhibits(boolean sorted) {
+		ArrayList<Exhibit> sortedExhibits = null;
+		if (sorted) sortedExhibits = (ArrayList<Exhibit>) Helper.sortByName(museum.exhibits);
+		else sortedExhibits = museum.exhibits;
 
 		if (sortedExhibits.size() == 0) {
 			System.out.println("There are no exhibits, add some and try again");
@@ -391,9 +394,27 @@ public class QUBMuseum {
 			opt = menu.getUserChoice();
 
 			switch (opt) {
-				case 1 -> {
+				case 1 -> { // add artifact to exhibit
 					artifact = selectArtifact();
 					if (artifact != null) {
+						System.out.println("Enter sign text or existing sign ID: ");
+						int signId = -1;
+						Sign sign = null;
+						String signStr = in.nextLine();
+
+						try {
+							signId = Integer.parseInt(signStr);
+						} catch (Exception e) {
+						}
+
+						if (signId != -1) {
+							sign = (Sign) Helper.findById(museum.signs, signId);
+							if (sign == null) System.out.println("Could not find sign with id: " + signId);
+						} else {
+							sign = new Sign(signStr);
+							museum.signs.add(sign);
+						}
+
 						System.out.println(
 								"Are you sure you want to add artifact " + artifact.getName() + " to the exhibit? y/n");
 						if (confirmAction()) {
@@ -405,7 +426,7 @@ public class QUBMuseum {
 							System.out.println("Did not add arifact");
 					}
 				}
-				case 2 -> {
+				case 2 -> { // remove artifact from exhibit
 					artifact = selectArtifact();
 					if (artifact != null) {
 						System.out.println("Are you sure you want to remove artifact " + artifact.getName()
@@ -537,7 +558,7 @@ public class QUBMuseum {
 
 			switch (opt) {
 				// add exhibit to annual plan
-				case 1 -> {
+				case 1 -> { // add exhibit to annual plan
 					exhibit = selectExhibit();
 					if (exhibit != null) {
 						// TODO - REMOVE THIS AND MAKE IT SELECT THE DATE AUTOMATICALLY
@@ -565,7 +586,7 @@ public class QUBMuseum {
 							}
 
 							if (month < 1 || month > 12) {
-								System.out.println("The mont range must be between 1 and 12");
+								System.out.println("The month range must be between 1 and 12");
 								hasError = true;
 							}
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUB Wub Musem - Artifacts</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <table id="table-editable" class="table-editable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Engagement time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>meow</td>
+                <td>
+                    <select name="artifactType" id="artifactType-0">
+                        <option value="1">Artifact</option>
+                        <option value="2">Painting</option>
+                        <option value="3">Sculpture</option>
+                        <option value="4">Digital</option>
+                        <option value="5">Tactile</option>
+                        <option value="6">Other</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <button id="btn-add-row">Add artifact</button>
+    <script src="edit_artifacts.js"></script>
+</body>
+</html>

@@ -43,7 +43,8 @@ public class QUBMuseum {
 
 	public static void manageArtifacts() {
 		Menu menu = new Menu("Manage Artifacts",
-				new String[] { "Add Artifact", "View Artifacts", "View artifacts sorted alphabetically", "Delete Artifact", "Go Back" });
+				new String[] { "Add Artifact", "View Artifacts", "View artifacts sorted alphabetically",
+						"Delete Artifact", "Go Back" });
 
 		int opt = -1;
 		Artifact artifact;
@@ -131,7 +132,8 @@ public class QUBMuseum {
 		// artifact name
 		System.out.print("Artifact name  : ");
 		String artifactName = in.nextLine();
-		Menu artifactTypeMenu = new Menu("Select artifact type", new String[] {"Artifact", "Painting", "Sculpture", "Digital", "Tactile", "Other"});
+		Menu artifactTypeMenu = new Menu("Select artifact type",
+				new String[] { "Artifact", "Painting", "Sculpture", "Digital", "Tactile", "Other" });
 		ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
 		System.out.print("Engagement time: ");
 		int engagementTime = in.nextInt();
@@ -143,8 +145,10 @@ public class QUBMuseum {
 	static void viewArtifacts(Boolean sorted) {
 		// artifact name
 		ArrayList<Artifact> sortedArtifacts = null;
-		if (sorted) sortedArtifacts = (ArrayList<Artifact>) Helper.sortByName(museum.artifacts);
-		else sortedArtifacts = museum.artifacts;
+		if (sorted)
+			sortedArtifacts = (ArrayList<Artifact>) Helper.sortByName(museum.artifacts);
+		else
+			sortedArtifacts = museum.artifacts;
 
 		for (int i = 0; i < sortedArtifacts.size(); i++) {
 			System.out.println(sortedArtifacts.get(i));
@@ -207,7 +211,10 @@ public class QUBMuseum {
 	static boolean deleteArtifact(Artifact artifact) {
 		for (int i = 0; i < museum.artifacts.size(); i++) {
 			if (museum.artifacts.get(i).getId() == artifact.getId()) {
-				museum.artifacts.remove(i);
+				for (int j = 0; j < museum.exhibits.size(); j++) {
+					museum.exhibits.get(i).removeArtifact(museum.artifacts.get(i).getId()); // remove artifact from all exhibits
+				}
+				museum.artifacts.remove(i); // remove artifact
 				return true;
 			}
 		}
@@ -217,7 +224,8 @@ public class QUBMuseum {
 
 	public static void manageExhibits() {
 		Menu menu = new Menu("Manage Exhibits",
-				new String[] { "Add exhibit", "View exhibits", "View exhibits sorted alphabetically", "Delete exhibit", "Update exhibits", "Go back" });
+				new String[] { "Add exhibit", "View exhibits", "View exhibits sorted alphabetically", "Delete exhibit",
+						"Update exhibits", "Go back" });
 
 		int opt = -1;
 
@@ -265,8 +273,10 @@ public class QUBMuseum {
 
 	public static void viewExhibits(boolean sorted) {
 		ArrayList<Exhibit> sortedExhibits = null;
-		if (sorted) sortedExhibits = (ArrayList<Exhibit>) Helper.sortByName(museum.exhibits);
-		else sortedExhibits = museum.exhibits;
+		if (sorted)
+			sortedExhibits = (ArrayList<Exhibit>) Helper.sortByName(museum.exhibits);
+		else
+			sortedExhibits = museum.exhibits;
 
 		if (sortedExhibits.size() == 0) {
 			System.out.println("There are no exhibits, add some and try again");
@@ -397,28 +407,31 @@ public class QUBMuseum {
 				case 1 -> { // add artifact to exhibit
 					artifact = selectArtifact();
 					if (artifact != null) {
-						System.out.println("Enter sign text or existing sign ID: ");
 						int signId = -1;
 						Sign sign = null;
-						String signStr = in.nextLine();
+						while (sign == null) {
+							System.out.println("Enter sign text or existing sign ID: ");
+							String signStr = in.nextLine();
 
-						try {
-							signId = Integer.parseInt(signStr);
-						} catch (Exception e) {
-						}
+							try {
+								signId = Integer.parseInt(signStr);
+							} catch (Exception e) {
+							}
 
-						if (signId != -1) {
-							sign = (Sign) Helper.findById(museum.signs, signId);
-							if (sign == null) System.out.println("Could not find sign with id: " + signId);
-						} else {
-							sign = new Sign(signStr);
-							museum.signs.add(sign);
+							if (signId != -1) {
+								sign = (Sign) Helper.findById(museum.signs, signId);
+								if (sign == null)
+									System.out.println("Could not find sign with id: " + signId);
+							} else {
+								sign = new Sign(signStr);
+								museum.signs.add(sign);
+							}
 						}
 
 						System.out.println(
-								"Are you sure you want to add artifact " + artifact.getName() + " to the exhibit? y/n");
+								"Are you sure you want to add artifact " + artifact.getName() + " with sign " + sign.getName() + " to the exhibit? y/n");
 						if (confirmAction()) {
-							if (exhibit.addArtifact(artifact))
+							if (exhibit.addArtifact(artifact, sign))
 								System.out.println("Artifact added");
 							else
 								System.out.println("Could not add artifact");
@@ -548,7 +561,8 @@ public class QUBMuseum {
 
 		Menu menu = new Menu("Update annual plan " + annualPlan.getName(),
 				new String[] { "Add exhibit to annual plan", "Remove exhibit from annual plan",
-						"Change the date of an exhibit", "View annual plan details", "View all exhibits in annual plan", "Go Back" });
+						"Change the date of an exhibit", "View annual plan details", "View all exhibits in annual plan",
+						"Go Back" });
 
 		int opt = -1;
 		Exhibit exhibit;

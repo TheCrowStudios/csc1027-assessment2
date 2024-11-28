@@ -1,4 +1,4 @@
-package part01;
+package part03;
 
 public class ExhibitArtifact {
 	private Artifact artifact;

@@ -8,7 +8,10 @@ import web.WebInterface;
 import web.WebRequest;
 
 public class QUBWebMuseum {
+	static Museum museum = new Museum();
+
     public static void main(String[] args) {
+        museum = Helper.generateMuseum();
         final String ROOT = "/home/crowie/eclipse-workspace/Assessment2/src/part03/part03/";
         WebInterface wInterface = new WebInterface(8888);
         ArrayList<WebRequest> wqueue = new ArrayList<WebRequest>();

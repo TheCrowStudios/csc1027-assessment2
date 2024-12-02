@@ -96,11 +96,23 @@ async function fetchDataAndFillTable(url: string): Promise<void> {
                 const row = tableBody.insertRow();
 
                 // Assuming the data has 5 columns (adjust as needed)
+                let jsonObject = item;
+                const idCell = row.insertCell();
+                const imageCell = row.insertCell();
+                const nameCell = row.insertCell();
+                const descriptionCell = row.insertCell();
+                const engagementTimeCell = row.insertCell();
+                idCell.innerHTML = jsonObject.id;
+                nameCell.innerHTML = jsonObject.name;
+                descriptionCell.innerHTML = jsonObject.description;
+                engagementTimeCell.innerHTML = jsonObject.engagementTime;
+                /*
                 Object.values(item).slice(0, 5).forEach((value) => {
                     const newCell = row.insertCell();
                     newCell.innerHTML = value;
                     newCell.addEventListener("click", () => editable.edit(newCell));
                 });
+                */
             });
         }
     } catch (error) {

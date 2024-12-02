@@ -1,12 +1,13 @@
 package com.qubwebmuseum;
 
-import com.qubwebmuseum.web.Response;
-import com.qubwebmuseum.web.WebInterface;
-import com.qubwebmuseum.web.WebRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+
 import com.google.gson.Gson;
+import com.qubwebmuseum.web.Response;
+import com.qubwebmuseum.web.WebInterface;
+import com.qubwebmuseum.web.WebRequest;
 
 public class QUBWebMuseum {
 	static Museum museum = new Museum();
@@ -27,7 +28,10 @@ public class QUBWebMuseum {
 
                 String filePath = ROOT + "public/" + wr.path;
                 if (wr.path.equals("artifacts.json")) {
-                    wr.r = new Response();
+                    wr.r = new Response(WebRequest.HTTP_OK, WebRequest.MIME_HTML, (new Gson()).toJson(museum.artifacts));
+                } else if (wr.path.equals("add_artifacts")) {
+                    wr.r = new Response(WebRequest.HTTP_REDIRECT, WebRequest.MIME_HTML, "");
+                    wr.r.addHeader("Location", "/");
                 } else {
                     System.out.println("Attempting to get file: " + filePath);
                     File file = new File(filePath);

@@ -50,31 +50,110 @@ public class Helper {
 	}
 
 	public static void generateArtifacts(Museum museum) {
-		museum.artifacts.add(new Artifact("Delaware Landscape", ArtifactType.PAINTING, 1));
-		museum.artifacts.add(new Artifact("Acropolis Statues", ArtifactType.SCULPTURE, 5));
-		museum.artifacts.add(new Artifact("Incas Interactive", ArtifactType.DIGITAL, 10));
-		museum.artifacts.add(new Artifact("TouchIt", ArtifactType.TACTILE, 8));
 		museum.artifacts.add(new Artifact("1KG Carbon Statue", ArtifactType.SCULPTURE, 8));
-		museum.artifacts.add(new Artifact("Dinosaur Statue", ArtifactType.ARTIFACT, 8));
-		museum.artifacts.add(new Artifact("Tar Pit Miniature", ArtifactType.SCULPTURE, 8));
-		museum.artifacts.add(new Artifact("Coal Miner Portrait", ArtifactType.PAINTING, 8));
-		museum.artifacts.add(new Artifact("Home Carbon Footprint Miniature", ArtifactType.SCULPTURE, 8));
+        museum.artifacts.add(new Artifact("Home Carbon Footprint Miniature", ArtifactType.SCULPTURE, 8));
+        museum.artifacts.add(new Artifact("Climate Change Interactive Map", ArtifactType.DIGITAL, 9));
+        museum.artifacts.add(new Artifact("Polar Ice Cap Model", ArtifactType.TACTILE, 7));
+
+        // Egypt Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Pharaoh Statue", ArtifactType.SCULPTURE, 10));
+        museum.artifacts.add(new Artifact("Hieroglyphic Tablet", ArtifactType.HISTORICAL, 9));
+        museum.artifacts.add(new Artifact("Mummy Reconstruction", ArtifactType.ARTIFACT, 8));
+        museum.artifacts.add(new Artifact("Ancient Egyptian Painting", ArtifactType.PAINTING, 7));
+
+        // Architecture Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Gothic Cathedral Model", ArtifactType.SCULPTURE, 9));
+        museum.artifacts.add(new Artifact("Frank Lloyd Wright Sketch", ArtifactType.PAINTING, 8));
+        museum.artifacts.add(new Artifact("Modern City Interactive", ArtifactType.DIGITAL, 10));
+        museum.artifacts.add(new Artifact("Ancient Roman Pillar", ArtifactType.HISTORICAL, 7));
+
+        // Vikings Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Viking Longship Model", ArtifactType.SCULPTURE, 9));
+        museum.artifacts.add(new Artifact("Norse Mythology Tapestry", ArtifactType.PAINTING, 8));
+        museum.artifacts.add(new Artifact("Viking Weapons Display", ArtifactType.ARTIFACT, 10));
+        museum.artifacts.add(new Artifact("Viking Settlement Miniature", ArtifactType.TACTILE, 7));
+
+        // History of AI Exhibit Artifacts
+        museum.artifacts.add(new Artifact("First Computer Model", ArtifactType.SCULPTURE, 10));
+        museum.artifacts.add(new Artifact("Alan Turing Portrait", ArtifactType.PAINTING, 9));
+        museum.artifacts.add(new Artifact("AI Development Timeline", ArtifactType.DIGITAL, 8));
+        museum.artifacts.add(new Artifact("Machine Learning Interactive", ArtifactType.TACTILE, 9));
+
+        // Ship Building Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Historical Ship Model", ArtifactType.SCULPTURE, 9));
+        museum.artifacts.add(new Artifact("Shipyard Worker Painting", ArtifactType.PAINTING, 8));
+        museum.artifacts.add(new Artifact("Nautical Navigation Tools", ArtifactType.ARTIFACT, 7));
+        museum.artifacts.add(new Artifact("Ship Construction Interactive", ArtifactType.DIGITAL, 10));
+
+        // Henry VIII Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Royal Throne Replica", ArtifactType.SCULPTURE, 10));
+        museum.artifacts.add(new Artifact("Henry VIII Portrait", ArtifactType.PAINTING, 9));
+        museum.artifacts.add(new Artifact("Tudor Era Artifacts", ArtifactType.HISTORICAL, 8));
+        museum.artifacts.add(new Artifact("Royal Court Interactive", ArtifactType.DIGITAL, 7));
+
+        // Geology Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Volcanic Rock Collection", ArtifactType.ARTIFACT, 9));
+        museum.artifacts.add(new Artifact("Geological Layers Model", ArtifactType.TACTILE, 8));
+        museum.artifacts.add(new Artifact("Mineral Composition Chart", ArtifactType.PAINTING, 7));
+        museum.artifacts.add(new Artifact("Earth Formation Interactive", ArtifactType.DIGITAL, 10));
+
+        // Beasts of the Sea Exhibit Artifacts
+        museum.artifacts.add(new Artifact("Blue Whale Skeleton", ArtifactType.SCULPTURE, 10));
+        museum.artifacts.add(new Artifact("Marine Ecosystem Painting", ArtifactType.PAINTING, 9));
+        museum.artifacts.add(new Artifact("Deep Sea Creature Models", ArtifactType.ARTIFACT, 8));
+        museum.artifacts.add(new Artifact("Ocean Life Interactive", ArtifactType.DIGITAL, 7));
 	}
 
 	public static void generateExhibits(Museum museum) {
-		museum.exhibits.add(new Exhibit("Global Warming"));
-		museum.exhibits.add(new Exhibit("Egypt"));
-		museum.exhibits.add(new Exhibit("Architecture"));
-		museum.exhibits.add(new Exhibit("Vikings"));
-		museum.exhibits.add(new Exhibit("History of AI"));
-		museum.exhibits.add(new Exhibit("Ship Building"));
-		museum.exhibits.add(new Exhibit("Henry VIII"));
-		museum.exhibits.add(new Exhibit("Geology"));
-		museum.exhibits.add(new Exhibit("Beasts of the Sea"));
+		Exhibit globalWarming = new Exhibit("Global Warming");
+        Exhibit egypt = new Exhibit("Egypt");
+        Exhibit architecture = new Exhibit("Architecture");
+        Exhibit vikings = new Exhibit("Vikings");
+        Exhibit historyOfAI = new Exhibit("History of AI");
+        Exhibit shipBuilding = new Exhibit("Ship Building");
+        Exhibit henryVIII = new Exhibit("Henry VIII");
+        Exhibit geology = new Exhibit("Geology");
+        Exhibit beastsOfTheSea = new Exhibit("Beasts of the Sea");
+
+        // Add Artifacts to Exhibits
+        for (Artifact artifact : museum.artifacts) {
+            switch (artifact.getName()) {
+                case "1KG Carbon Statue":
+                case "Home Carbon Footprint Miniature":
+                case "Climate Change Interactive Map":
+                case "Polar Ice Cap Model":
+                    globalWarming.addArtifact(artifact, new Sign(artifact.getName()));
+                    break;
+                case "Pharaoh Statue":
+                case "Hieroglyphic Tablet":
+                case "Mummy Reconstruction":
+                case "Ancient Egyptian Painting":
+                    egypt.addArtifact(artifact, new Sign(artifact.getName()));
+                    break;
+                // Continue with similar logic for other exhibits
+            }
+        }
+
+        // Add Exhibits to Museum
+        museum.exhibits.add(globalWarming);
+        museum.exhibits.add(egypt);
+        museum.exhibits.add(architecture);
+        museum.exhibits.add(vikings);
+        museum.exhibits.add(historyOfAI);
+        museum.exhibits.add(shipBuilding);
+        museum.exhibits.add(henryVIII);
+        museum.exhibits.add(geology);
+        museum.exhibits.add(beastsOfTheSea);
 	}
 
 	public static void generateAnnualPlan(Museum museum) {
-		museum.annualPlans.add(new AnnualPlan("Exhibit Hall 1"));
+		AnnualPlan annualPlan = new AnnualPlan("Exhibit Hall 1");
+
+		for (Exhibit exhibit : museum.exhibits) {
+			if (!annualPlan.addExhibit(exhibit, -1)) System.out.println("could not add exhibit to annual plan");
+		}
+
+		museum.annualPlans.add(annualPlan);
 	}
 
 	public static Museum generateMuseum() {
@@ -83,9 +162,10 @@ public class Helper {
 		generateExhibits(museum);
 		generateAnnualPlan(museum);
 
-		for (int i = 0; i < museum.exhibits.size(); i++) {
-			
-		}
+		System.out.println("Museum genereted");
+		System.out.println("Total artifacts: " + museum.artifacts.size());
+		System.out.println("Total exhibits: " + museum.exhibits.size());
+		System.out.println("Total annual plans: " + museum.annualPlans.size());
 
 		return museum;
 	}

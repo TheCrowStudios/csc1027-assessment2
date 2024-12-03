@@ -541,21 +541,14 @@ public class QUBMuseum {
 			opt = menu.getUserChoice();
 
 			switch (opt) {
-				case 1:
-					createAnnualPlan();
-					break;
-				case 2:
-					viewAnnualPlans();
-					break;
-				case 3:
-					viewAnnualPlan(selectAnnualPlan());
-				case 4:
-					modifyAnnualPlan(selectAnnualPlan());
-					break;
-				case 5:
-					break;
-				default:
-					break;
+				case 1 -> createAnnualPlan();
+				case 2 -> viewAnnualPlans();
+				case 3 -> viewAnnualPlan(selectAnnualPlan());
+				case 4 -> modifyAnnualPlan(selectAnnualPlan());
+				case 5 -> {
+                        }
+				default -> {
+                        }
 			}
 		}
 	}

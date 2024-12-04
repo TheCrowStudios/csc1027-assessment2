@@ -59,6 +59,24 @@ public class QUBMuseum {
 		return input;
 	}
 
+	public static int getInt() {
+		int input = -1;
+		boolean inputValid = false;
+
+		while (!inputValid) {
+			try {
+				input = in.nextInt();
+				inputValid = true;
+			} catch (Exception e) {
+				System.out.println("Enter a number");
+				in.nextLine();
+			}
+		}
+
+		in.nextLine();
+		return input;
+	}
+
 	/**
 	 * menu options for managing artifacts
 	 */
@@ -125,7 +143,7 @@ public class QUBMuseum {
 				case 1 -> {
 					// search by id
 					System.out.println("ID to select: ");
-					int id = in.nextInt();
+					int id = getInt();
 					in.nextLine();
 					artifact = (Artifact) Helper.findById(artifacts, id);
 					if (artifact != null) {
@@ -173,9 +191,16 @@ public class QUBMuseum {
 		}
 		Menu artifactTypeMenu = new Menu("Select artifact type",
 				new String[] { "Artifact", "Painting", "Sculpture", "Historical", "Digital", "Tactile", "Other" });
-		ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
+		ArtifactType type = null;
+		while (type == null) {
+			try {
+				type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
+			} catch (Exception e) {
+				System.out.println("Select a valid type");
+			}
+		}
 		System.out.print("Engagement time: ");
-		int engagementTime = in.nextInt();
+		int engagementTime = getInt();
 		in.nextLine();
 		museum.artifacts.add(new Artifact(artifactName, type, engagementTime));
 		System.out.println("Artifact added with id: " + museum.artifacts.getLast().getId());
@@ -212,7 +237,7 @@ public class QUBMuseum {
 			switch (opt) {
 				case 1: // search by id
 					System.out.println("ID to look for: ");
-					id = in.nextInt();
+					id = getInt();
 					in.nextLine();
 					Artifact artifact = (Artifact) Helper.findById(museum.artifacts, id);
 					if (artifact != null)
@@ -225,7 +250,7 @@ public class QUBMuseum {
 					break;
 				case 3:
 					System.out.println("Exhibit ID to look for: ");
-					id = in.nextInt();
+					id = getInt();
 					in.nextLine();
 					Exhibit exhibit = (Exhibit) Helper.findById(museum.exhibits, id);
 					if (exhibit != null) {
@@ -276,7 +301,14 @@ public class QUBMuseum {
 					System.out.println("New name (leave blank to cancel): ");
 					Menu artifactTypeMenu = new Menu("Select artifact type",
 							new String[] { "Artifact", "Painting", "Sculpture", "Historical", "Digital", "Tactile", "Other" });
-					ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
+					ArtifactType type = null;
+					while (type == null) {
+						try {
+							type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
+						} catch (Exception e) {
+							System.out.println("Select a valid type");
+						}
+					}
 					System.out.println("Change name from " + artifact.getType().toString() + " to " + type.toString() + "? y/n");
 					if (confirmAction()) artifact.setType(type);
                         }
@@ -397,7 +429,7 @@ public class QUBMuseum {
 			switch (opt) {
 				case 1: // search by id
 					System.out.println("ID to look for: ");
-					int id = in.nextInt();
+					int id = getInt();
 					in.nextLine();
 					Exhibit exhibit = (Exhibit) Helper.findById(museum.exhibits, id);
 					if (exhibit != null)
@@ -485,7 +517,7 @@ public class QUBMuseum {
 				case 1 -> {
 					// search by id
 					System.out.println("ID to select: ");
-					int id = in.nextInt();
+					int id = getInt();
 					in.nextLine();
 					System.out.println("");
 					exhibit = (Exhibit) Helper.findById(museum.exhibits, id);
@@ -685,7 +717,7 @@ public class QUBMuseum {
 				case 1 -> {
 					// search by id
 					System.out.println("ID to look for: ");
-					int id = in.nextInt();
+					int id = getInt();
 					in.nextLine();
 					Exhibit exhibit = (Exhibit) Helper.findById(museum.exhibits, id);
 					if (exhibit != null)
@@ -847,7 +879,7 @@ public class QUBMuseum {
 	 */
 	public static void selectAndRemoveExhibitFromAnnualPlan(AnnualPlan annualPlan) {
 		System.out.println("Enter the month of the exhibit in the annual plan to remove it");
-		int month = in.nextInt();
+		int month = getInt();
 
 		if (month < 1 || month > 12) {
 			System.out.println("Month must be between 1 and 12");
@@ -880,7 +912,7 @@ public class QUBMuseum {
 				case 1 -> {
 					// search by id
 					System.out.println("ID to select: ");
-					int id = in.nextInt();
+					int id = getInt();
 					in.nextLine();
 					annualPlan = (AnnualPlan) Helper.findById(museum.annualPlans, id);
 					if (annualPlan != null) {

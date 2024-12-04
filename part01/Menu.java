@@ -28,7 +28,15 @@ public class Menu {
 	public int getUserChoice() {
 		display();
 		System.out.print("Enter Selection: ");
-		int value = input.nextInt();
+		int value = -1;
+
+		try {
+			value = input.nextInt();
+		} catch (Exception e) {
+			System.out.println("Enter a number");
+		}
+
+		input.nextLine();
 		return value;
 	}
 }

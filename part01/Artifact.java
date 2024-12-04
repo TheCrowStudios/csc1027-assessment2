@@ -23,4 +23,8 @@ public class Artifact extends IdNameClass {
     public ArtifactType getType() {
         return type;
     }
+
+    public void setType(ArtifactType type) {
+        this.type = type;
+    }
 }

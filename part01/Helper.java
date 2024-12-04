@@ -16,7 +16,7 @@ public class Helper {
 	public static <T extends IdNameClass> ArrayList<? extends IdNameClass> findByName(ArrayList<? extends IdNameClass> list, String name) {
 		ArrayList<T> searchResults = new ArrayList<T>();
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getName().contains(name)) {
+			if (list.get(i).getName().toLowerCase().contains(name.toLowerCase())) {
 				searchResults.add((T) list.get(i));
 			}
 		}

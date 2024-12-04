@@ -11,6 +11,10 @@ public class Exhibit extends IdNameClass {
 		currentId += 1;
 	}
 
+	public ArrayList<ExhibitArtifact> getExhibitArtifacts() {
+		return artifacts;
+	}
+
 	public ArrayList<Artifact> getArtifacts() {
 		ArrayList<Artifact> artifacts = new ArrayList<>();
 		for (int i = 0; i < this.artifacts.size(); i++) {

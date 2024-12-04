@@ -56,6 +56,8 @@ public class AnnualPlan extends IdNameClass {
 	}
 
 	public boolean removeExhibit(int month) {
+		if (month < 1 || month > 12) return false;
+
 		try {
 			if (exhibits.get(month - 1) != null) {
 				exhibits.remove(month - 1);
@@ -99,5 +101,9 @@ public class AnnualPlan extends IdNameClass {
 		}
 
 		return exhibitMonths;
+	}
+
+	public ArrayList<AnnualPlanExhibit> getExhibits() {
+		return exhibits;
 	}
 }

@@ -21,4 +21,8 @@ public abstract class IdNameClass {
 		return String.format("ID: %s\n"
 				+ "Name: %s", id, name);
 	}
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

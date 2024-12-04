@@ -31,6 +31,7 @@ public class QUBMuseum {
 
 	/**
 	 * gets a yes or no input from the user and returns it
+	 * 
 	 * @return
 	 */
 	public static boolean confirmAction() {
@@ -38,11 +39,24 @@ public class QUBMuseum {
 
 		do {
 			input = in.nextLine();
-			System.out.println("input (y/n): " + input);
-			if (!input.toLowerCase().equals("y") && !input.toLowerCase().equals("n")) System.out.println("Input must be y/n");
+			if (!input.toLowerCase().equals("y") && !input.toLowerCase().equals("n"))
+				System.out.println("Input must be y/n");
+				System.out.println("input (y/n): " + input);
 		} while (!input.toLowerCase().equals("y") && !input.toLowerCase().equals("n"));
 
 		return input.equals("y");
+	}
+
+	public static String getInput(int maxLen) {
+		String input = null;
+
+		do {
+			input = in.nextLine();
+			if (input.length() > maxLen)
+				System.out.println("You can enter a maximum of " + maxLen + " characters, try again");
+		} while (input.length() > maxLen);
+
+		return input;
 	}
 
 	/**
@@ -51,22 +65,24 @@ public class QUBMuseum {
 	public static void manageArtifacts() {
 		Menu menu = new Menu("Manage Artifacts",
 				new String[] { "Add Artifact", "View Artifacts", "View artifacts sorted alphabetically",
+						"Update artifact",
 						"Delete Artifact", "Go Back" });
 
 		int opt = -1;
 		Artifact artifact;
 
-		while (opt != 5) {
+		while (opt != 6) {
 			opt = menu.getUserChoice();
 
 			switch (opt) {
 				case 1 -> addArtifact(); // add artifact
 				case 2 -> viewArtifacts(false); // view artifacts
 				case 3 -> viewArtifacts(true);
-				case 4 -> { // delete artifact
+				case 4 -> updateArtifact(selectArtifact(museum.artifacts));
+				case 5 -> { // delete artifact
 					artifact = selectArtifact(museum.artifacts);
 					if (artifact != null) {
-						System.out.println("Are you sure you want to delete artifact " + artifact.getName() + "y/n");
+						System.out.println("Are you sure you want to delete artifact " + artifact.getName() + "? y/n");
 						if (confirmAction()) {
 							if (deleteArtifact(artifact))
 								System.out.println("Artifact deleted");
@@ -77,7 +93,7 @@ public class QUBMuseum {
 						}
 					}
 				}
-				case 5 -> { // go back
+				case 6 -> { // go back
 				}
 				default -> {
 				}
@@ -87,6 +103,7 @@ public class QUBMuseum {
 
 	/**
 	 * uses user input to select an artifact and returns it
+	 * 
 	 * @param artifacts
 	 * @return
 	 */
@@ -106,36 +123,36 @@ public class QUBMuseum {
 			opt = menu.getUserChoice();
 			switch (opt) {
 				case 1 -> {
-                                    // search by id
-                                    System.out.println("ID to select: ");
-                                    int id = in.nextInt();
-                                    in.nextLine();
-                                    artifact = (Artifact) Helper.findById(artifacts, id);
-                                    if (artifact != null) {
-                                        System.out.println("Selected artifact:");
-                                        System.out.println(artifact);
-                                    } else
-                                        System.out.println("Could not find artifact with specified id");
-                        }
+					// search by id
+					System.out.println("ID to select: ");
+					int id = in.nextInt();
+					in.nextLine();
+					artifact = (Artifact) Helper.findById(artifacts, id);
+					if (artifact != null) {
+						System.out.println("Selected artifact:");
+						System.out.println(artifact);
+					} else
+						System.out.println("Could not find artifact with specified id");
+				}
 				case 2 -> {
-                                    // search by name
-                                    System.out.println("Name to look for: ");
-                                    String name = in.nextLine();
-                                    searchResults = (ArrayList<Artifact>) Helper.findByName(artifacts, name);
-                                    if (searchResults.size() == 0)
-                                        System.out.println("No artifacts found with that name");
-                                    else
-                                        System.out.println("Found the artifacts: ");
-                                    
-                                    for (int i = 0; i < searchResults.size(); i++) {
-                                        System.out.println(searchResults.get(i));
-                                    }
-                        }
+					// search by name
+					System.out.println("Name to look for: ");
+					String name = in.nextLine();
+					searchResults = (ArrayList<Artifact>) Helper.findByName(artifacts, name);
+					if (searchResults.size() == 0)
+						System.out.println("No artifacts found with that name");
+					else
+						System.out.println("Found the artifacts: ");
+
+					for (int i = 0; i < searchResults.size(); i++) {
+						System.out.println(searchResults.get(i));
+					}
+				}
 				case 3 -> {
-                        }
+				}
 			}
-                    // return
-                    
+			// return
+
 		}
 
 		System.out.println();
@@ -148,10 +165,14 @@ public class QUBMuseum {
 	 */
 	static void addArtifact() {
 		// artifact name
-		System.out.print("Artifact name  : ");
-		String artifactName = in.nextLine();
+		System.out.print("Artifact name (leave empty to cancel): ");
+		String artifactName = getInput(30).trim();
+		if (artifactName.equals("")) {
+			System.out.println("Cancelled");
+			return;
+		}
 		Menu artifactTypeMenu = new Menu("Select artifact type",
-				new String[] { "Artifact", "Painting", "Sculpture", "Digital", "Tactile", "Other" });
+				new String[] { "Artifact", "Painting", "Sculpture", "Historical", "Digital", "Tactile", "Other" });
 		ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
 		System.out.print("Engagement time: ");
 		int engagementTime = in.nextInt();
@@ -162,6 +183,7 @@ public class QUBMuseum {
 
 	/**
 	 * prints out the artifacts and then uses user input to get search results
+	 * 
 	 * @param sorted
 	 */
 	static void viewArtifacts(Boolean sorted) {
@@ -230,8 +252,45 @@ public class QUBMuseum {
 		}
 	}
 
+	public static void updateArtifact(Artifact artifact) {
+		if (artifact == null) return;
+
+		Menu menu = new Menu("Update artifact options", new String[] {"Change artifact name", "Change artifact type", "Go back"});
+
+		int opt = -1;
+
+		while (opt != 3) {
+			opt = menu.getUserChoice();
+
+			switch (opt) {
+				case 1 -> {
+					System.out.println("Current name: " + artifact.getName());
+					System.out.println("New name (leave blank to cancel): ");
+					String name = getInput(30).trim();
+					if (name.equals("")) break;
+					System.out.println("Change name from " + artifact.getName() + " to " + name + "? y/n");
+					if (confirmAction()) artifact.setName(name);
+                        }
+				case 2 -> {
+					System.out.println("Current type: " + artifact.getType().toString());
+					System.out.println("New name (leave blank to cancel): ");
+					Menu artifactTypeMenu = new Menu("Select artifact type",
+							new String[] { "Artifact", "Painting", "Sculpture", "Historical", "Digital", "Tactile", "Other" });
+					ArtifactType type = ArtifactType.fromInt(artifactTypeMenu.getUserChoice());
+					System.out.println("Change name from " + artifact.getType().toString() + " to " + type.toString() + "? y/n");
+					if (confirmAction()) artifact.setType(type);
+                        }
+				case 3 -> {
+                                    return;
+                        }
+			}
+		}
+	}
+
 	/**
-	 * removes the passed in artifact from the museum and from any exhibits that contain the artifact
+	 * removes the passed in artifact from the museum and from any exhibits that
+	 * contain the artifact
+	 * 
 	 * @param artifact
 	 * @return
 	 */
@@ -254,12 +313,12 @@ public class QUBMuseum {
 	 */
 	public static void manageExhibits() {
 		Menu menu = new Menu("Manage Exhibits",
-				new String[] { "Add exhibit", "View exhibits", "View exhibits sorted alphabetically", "Delete exhibit",
+				new String[] { "Add exhibit", "View exhibits", "View exhibits sorted alphabetically", "View artifacts in an exhibit", "Delete exhibit",
 						"Update exhibits", "Go back" });
 
 		int opt = -1;
 
-		while (opt != 6) {
+		while (opt != 7) {
 			opt = menu.getUserChoice();
 			Exhibit exhibit;
 			String input = "";
@@ -269,9 +328,12 @@ public class QUBMuseum {
 				case 2 -> viewExhibits(false);
 				case 3 -> viewExhibits(true);
 				case 4 -> {
+					viewExhibitArtifacts(selectExhibit());
+				}
+				case 5 -> {
 					exhibit = selectExhibit();
 					if (exhibit != null) {
-						System.out.println("Are you sure you want to delete exhibit " + exhibit.getName() + " y/n");
+						System.out.println("Are you sure you want to delete exhibit " + exhibit.getName() + "? y/n");
 						if (confirmAction()) {
 							if (deleteExhibit(exhibit))
 								System.out.println("Exhibit deleted");
@@ -281,12 +343,12 @@ public class QUBMuseum {
 							System.out.println("Did not delete exhibit");
 					}
 				}
-				case 5 -> {
+				case 6 -> {
 					exhibit = selectExhibit();
 					if (exhibit != null)
 						updateExhibit(exhibit);
 				}
-				case 6 -> {
+				case 7 -> {
 				}
 				default -> {
 				}
@@ -299,13 +361,14 @@ public class QUBMuseum {
 	 */
 	public static void addExhibit() {
 		System.out.print("exhibit name  : ");
-		String name = in.nextLine();
+		String name = getInput(30);
 		museum.exhibits.add(new Exhibit(name));
 		System.out.println("Exhibit added with id: " + museum.exhibits.getLast().getId());
 	}
 
 	/**
 	 * prints out the exhibits and then uses user input to get search results
+	 * 
 	 * @param sorted
 	 */
 	public static void viewExhibits(boolean sorted) {
@@ -362,14 +425,35 @@ public class QUBMuseum {
 		System.out.println();
 	}
 
+	public static void viewExhibitArtifacts(Exhibit exhibit) {
+		if (exhibit == null) return;
+
+		ArrayList<ExhibitArtifact> exhibitArtifacts = exhibit.getExhibitArtifacts();
+
+		for (ExhibitArtifact artifact : exhibitArtifacts) {
+			System.out.println(artifact);
+		}
+	}
+
 	/**
-	 * removes the passed in exhibit from the museum and from any annual plans that contain the exhibit
+	 * removes the passed in exhibit from the museum and from any annual plans that
+	 * contain the exhibit
+	 * 
 	 * @param exhibit
 	 * @return
 	 */
 	public static boolean deleteExhibit(Exhibit exhibit) {
 		for (int i = 0; i < museum.exhibits.size(); i++) {
 			if (museum.exhibits.get(i).getId() == exhibit.getId()) {
+				// remove this exhibit in any annual plans
+				for (AnnualPlan annualPlan : museum.annualPlans) {
+					for (int j = 0; j < annualPlan.getExhibits().size(); j++) {
+						AnnualPlanExhibit annualPlanExhibit = annualPlan.getExhibits().get(j);
+						if (annualPlanExhibit != null) {
+							if (annualPlanExhibit.getExhibit().getId() == exhibit.getId()) annualPlan.removeExhibit(j + 1);
+						}
+					}
+				}
 				museum.exhibits.remove(i);
 				return true;
 			}
@@ -380,6 +464,7 @@ public class QUBMuseum {
 
 	/**
 	 * uses user input to search the museum exhibits and select an exhibit
+	 * 
 	 * @return
 	 */
 	public static Exhibit selectExhibit() {
@@ -407,7 +492,6 @@ public class QUBMuseum {
 					if (exhibit != null) {
 						System.out.println("Selected exhibit:");
 						System.out.println(exhibit);
-						return exhibit;
 					} else
 						System.out.println("Could not find exhibit with specified id");
 				}
@@ -438,6 +522,7 @@ public class QUBMuseum {
 
 	/**
 	 * menu options for updating a selected exhibit
+	 * 
 	 * @param exhibit
 	 */
 	public static void updateExhibit(Exhibit exhibit) {
@@ -445,11 +530,11 @@ public class QUBMuseum {
 			return;
 
 		Menu menu = new Menu("Update exhibit " + exhibit.getName(),
-				new String[] { "Add artifact to exhibit", "Remove artifact from exhibit", "Go Back" });
+				new String[] { "Add artifact to exhibit", "Remove artifact from exhibit", "View artifacts in exhibit", "Go Back" });
 
 		int opt = -1;
 
-		while (opt != 3) {
+		while (opt != 4) {
 			opt = menu.getUserChoice();
 
 			switch (opt) {
@@ -460,6 +545,9 @@ public class QUBMuseum {
 					selectAndRemoveArtifactFromExhibit(exhibit);
 				}
 				case 3 -> {
+					viewExhibitArtifacts(exhibit);
+				}
+				case 4 -> {
 				}
 				default -> {
 				}
@@ -469,6 +557,7 @@ public class QUBMuseum {
 
 	/**
 	 * gets the user to select an artifact and at it to the exhibit
+	 * 
 	 * @param exhibit
 	 */
 	public static void selectAndAddArtifactToExhibit(Exhibit exhibit) {
@@ -478,7 +567,7 @@ public class QUBMuseum {
 			Sign sign = null;
 			while (sign == null) {
 				System.out.println("Enter sign text or existing sign ID: ");
-				String signStr = in.nextLine();
+				String signStr = getInput(200);
 
 				try {
 					signId = Integer.parseInt(signStr);
@@ -496,7 +585,8 @@ public class QUBMuseum {
 			}
 
 			System.out.println(
-					"Are you sure you want to add artifact " + artifact.getName() + " with sign " + sign.getName() + " to the exhibit? y/n");
+					"Are you sure you want to add artifact " + artifact.getName() + " with sign " + sign.getName()
+							+ " to the exhibit? y/n");
 			if (confirmAction()) {
 				if (exhibit.addArtifact(artifact, sign))
 					System.out.println("Artifact added");
@@ -508,7 +598,9 @@ public class QUBMuseum {
 	}
 
 	/**
-	 * gets the user to select an artifact from the list of artifacts in the exhibit to remove
+	 * gets the user to select an artifact from the list of artifacts in the exhibit
+	 * to remove
+	 * 
 	 * @param exhibit
 	 */
 	public static void selectAndRemoveArtifactFromExhibit(Exhibit exhibit) {
@@ -546,9 +638,9 @@ public class QUBMuseum {
 				case 3 -> viewAnnualPlan(selectAnnualPlan());
 				case 4 -> modifyAnnualPlan(selectAnnualPlan());
 				case 5 -> {
-                        }
+				}
 				default -> {
-                        }
+				}
 			}
 		}
 	}
@@ -558,16 +650,26 @@ public class QUBMuseum {
 	 */
 	static void createAnnualPlan() {
 		// Generate annual plan
-		System.out.print("Annual plan name (e.g. name of the exhibit hall): ");
-		String name = in.nextLine();
+		System.out.print("Annual plan name (e.g. name of the exhibit hall, leave blank to cancel): ");
+		String name = getInput(30).trim();
+		if (name.equals("")) {
+			System.out.println("Cancelled");
+			return;
+		}
 		museum.annualPlans.add(new AnnualPlan(name));
 		System.out.println("Added new annual plan with id: " + museum.annualPlans.getLast().getId());
 	}
 
 	/**
-	 * prints out the general description of annual plans in the museum and then uses user input to get search results
+	 * prints out the general description of annual plans in the museum and then
+	 * uses user input to get search results
 	 */
 	static void viewAnnualPlans() {
+		if (museum.annualPlans.size() == 0) {
+			System.out.println("No annual plans, add an annual plan and try again");
+			return;
+		}
+
 		for (int i = 0; i < museum.annualPlans.size(); i++) {
 			System.out.println(museum.annualPlans.get(i));
 			System.out.println();
@@ -616,6 +718,7 @@ public class QUBMuseum {
 
 	/**
 	 * provides detailed information of an annual plan showing all the exhibit dates
+	 * 
 	 * @param annualPlan
 	 */
 	static void viewAnnualPlan(AnnualPlan annualPlan) {
@@ -691,13 +794,24 @@ public class QUBMuseum {
 				}
 				if (annualPlan.getExhibitDates().contains(month)) {
 					System.out.println("The month " + month
-							+ "is already being used by another exhibit in the annual plan");
+							+ " is already being used by another exhibit in the annual plan");
 					hasError = true;
 				}
 
 				if (month < 1 || month > 12) {
 					System.out.println("The month range must be between 1 and 12");
 					hasError = true;
+				}
+
+				for (int i = 0; i < museum.annualPlans.size(); i++) {
+					ArrayList<AnnualPlanExhibit> exhibits = museum.annualPlans.get(i).getExhibits();
+					for (int j = 0; j < exhibits.size(); j++) {
+						if (exhibits.get(j) == null) continue; // no exhibit at that month
+						if (exhibits.get(j).getExhibit().getId() == exhibit.getId() && exhibits.get(j).getMonth() == month) {
+							System.out.println("This exhibit is already added to annual plan " + museum.annualPlans.get(i).getName() + " at this month");
+							hasError = true;
+						}
+					}
 				}
 
 				if (hasError) {
@@ -726,12 +840,20 @@ public class QUBMuseum {
 	}
 
 	/**
-	 * uses user input to select an exhibit month from the annual plan to remove it from there
+	 * uses user input to select an exhibit month from the annual plan to remove it
+	 * from there
+	 * 
 	 * @param annualPlan
 	 */
 	public static void selectAndRemoveExhibitFromAnnualPlan(AnnualPlan annualPlan) {
 		System.out.println("Enter the month of the exhibit in the annual plan to remove it");
 		int month = in.nextInt();
+
+		if (month < 1 || month > 12) {
+			System.out.println("Month must be between 1 and 12");
+			return;
+		}
+
 		if (annualPlan.removeExhibit(month))
 			System.out.println("Exhibit removed from annual plan");
 		else
@@ -756,37 +878,37 @@ public class QUBMuseum {
 			opt = menu.getUserChoice();
 			switch (opt) {
 				case 1 -> {
-                                    // search by id
-                                    System.out.println("ID to select: ");
-                                    int id = in.nextInt();
-                                    in.nextLine();
-                                    annualPlan = (AnnualPlan) Helper.findById(museum.annualPlans, id);
-                                    if (annualPlan != null) {
-                                        System.out.println("Selected annual plan:");
-                                        System.out.println(annualPlan);
-                                    } else
-                                        System.out.println("Could not find annual plan with specified id");
-                        }
+					// search by id
+					System.out.println("ID to select: ");
+					int id = in.nextInt();
+					in.nextLine();
+					annualPlan = (AnnualPlan) Helper.findById(museum.annualPlans, id);
+					if (annualPlan != null) {
+						System.out.println("Selected annual plan:");
+						System.out.println(annualPlan);
+					} else
+						System.out.println("Could not find annual plan with specified id");
+				}
 				case 2 -> {
-                                    // search by name
-                                    System.out.println("Name to look for: ");
-                                    String name = in.nextLine();
-                                    searchResults = (ArrayList<Exhibit>) Helper.findByName(museum.annualPlans, name);
-                                    
-                                    if (searchResults.size() == 0)
-                                        System.out.println("No annual plans found with that name");
-                                    else
-                                        System.out.println("Found the following annual plans: ");
-                                    
-                                    for (int i = 0; i < searchResults.size(); i++) {
-                                        System.out.println(searchResults.get(i));
-                                    }
-                        }
+					// search by name
+					System.out.println("Name to look for: ");
+					String name = in.nextLine();
+					searchResults = (ArrayList<Exhibit>) Helper.findByName(museum.annualPlans, name);
+
+					if (searchResults.size() == 0)
+						System.out.println("No annual plans found with that name");
+					else
+						System.out.println("Found the following annual plans: ");
+
+					for (int i = 0; i < searchResults.size(); i++) {
+						System.out.println(searchResults.get(i));
+					}
+				}
 				case 3 -> {
-                        }
+				}
 			}
-                    // return
-                    		}
+			// return
+		}
 
 		System.out.println();
 		return annualPlan;
